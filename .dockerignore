@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+__pycache__
+*.pyc
+.ipynb_checkpoints
+.venv
+venv
+output
+docs
+README.md
