@@ -1,0 +1,28 @@
+# VISPER — GPU-accelerated variant
+# Requires an NVIDIA GPU, driver, and the NVIDIA Container Toolkit on
+# the host (`docker run --gpus all ...`). See docs/SETUP_AND_DEPLOYMENT.md.
+
+FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04
+
+WORKDIR /app
+
+# Python + ffmpeg + git, same runtime deps as the CPU Dockerfile, on
+# top of the CUDA runtime base instead of python:3.10-slim.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3 python3-pip git ffmpeg \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/python3 /usr/bin/python
+
+COPY requirements.txt .
+
+# CUDA-enabled PyTorch first, matching the CUDA runtime above, then
+# the rest of requirements.txt (openai-whisper will reuse this torch
+# install rather than pulling in a CPU-only wheel).
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cu121 \
+    && pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+EXPOSE 8888
+
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

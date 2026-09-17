@@ -1,0 +1,18 @@
+version: "3.9"
+
+# CPU service by default. For GPU, build/run Dockerfile.gpu directly
+# (see docs/SETUP_AND_DEPLOYMENT.md) — Compose's GPU device syntax
+# varies by Docker version, so it's kept out of this default file to
+# avoid a config that silently no-ops on older installs.
+
+services:
+  visper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./VISPER Datasets:/app/VISPER Datasets"
+      - "./output:/app/output"
+    restart: unless-stopped
