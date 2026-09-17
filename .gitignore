@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Audio / output artifacts — keep sample datasets tracked, but not
+# real user audio or generated output dropped alongside them.
+output/
+*.wav
+*.mp3
+*.m4a
+*.flac
+!VISPER Datasets/**
+
+# OS/editor cruft
+.DS_Store
+.vscode/
+.idea/
+
+# Environment/secrets
+.env
